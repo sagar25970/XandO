@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} XandO | Home {% endblock %}
+{% block content %}
+<script
+        type="text/javascript"
+        src="{{ url_for('static', filename='index.js') }}"
+></script>
+
+<div class="messages-form">
+    <h3 class="logo">Messages</h3>
+
+    <!-- Replace This -->
+    <div class="messages">
+        {% for message in messages %}
+        {% if message.username == user.username %}
+        <div class="chat-box right">{{ message.data }}</div>
+        <br/>
+        {% else %}
+        <div class="chat-box left">{{ message.username }} : {{ message.data }}</div>
+        <br/>
+        {%endif%}
+        {% endfor %}
+    </div>
+
+    <!-- Till here -->
+    <form method="POST">
+        <div class="form-group">
+            <input type="text" class="form-control" id="message" name="message" placeholder="Enter message">
+            <button align="center" type="submit" class="btn btn-primary bg-dark">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

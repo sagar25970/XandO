@@ -18,7 +18,7 @@ def create_room():
         elif len(room_password) < 1:
             flash('Room password cannot be empty!', category='error')
         else:
-            room = Room(password=room_password)
+            room = Room(password=room_password, game='         ')
             db.session.add(room)
             db.session.flush()
             player = Player(username=username, room_id=room.id)
@@ -78,9 +78,9 @@ def display_db():
     rooms = Room.query.all()
     players = Player.query.all()
     messages = Message.query.all()
-    print('Room ID\t\tRoom Password')
+    print('Room ID\t\tRoom Password\t\tRoom Game')
     for room in rooms:
-        print(str(room.id) + '\t\t\t' + room.password)
+        print(str(room.id) + '\t\t\t' + room.password + '\t\t\t' + room.game)
     print('\n')
 
     print('Player ID\t\tPlayer Username')

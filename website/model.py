@@ -7,6 +7,8 @@ from . import db
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(150))
+    game = db.Column(db.String(9))
+    turn_id = db.Column(db.String(150))
     players = db.relationship('Player')
     messages = db.relationship('Message')
 
@@ -25,8 +27,5 @@ class Message(db.Model):
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
     username = db.Column(db.String)
 
-    def serialize(self):
-        return {
-            'username': self.username,
-            'data': self.data,
-        }
+    def __str__(self):
+        return '{\n"username": "' + self.username + '",\n"data": "' + self.data + '"\n}\n'

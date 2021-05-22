@@ -1,9 +1,7 @@
 {% for message in messages %}
 {% if message.username == user.username %}
 <div class="chat-box right">{{ message.data }}</div>
-<br/>
 {% else %}
 <div class="chat-box left">{{ message.username }} : {{ message.data }}</div>
-<br/>
 {%endif%}
 {% endfor %}

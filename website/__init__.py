@@ -16,9 +16,11 @@ def create_app():
     
     from .view import view
     from .auth import auth
+    from .testing import testing
 
     app.register_blueprint(view, url_prefix='')
     app.register_blueprint(auth, url_prefix='')
+    app.register_blueprint(testing, url_prefix='')
 
     from .model import Room, Player, Message
 

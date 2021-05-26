@@ -27,5 +27,6 @@ class Message(db.Model):
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
     username = db.Column(db.String)
 
-    def __str__(self):
-        return '{\n"username": "' + self.username + '",\n"data": "' + self.data + '"\n}\n'
+    def to_json(self):
+        return {"player_id": self.player_id, "data": self.data}
+

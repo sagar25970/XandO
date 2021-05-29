@@ -28,5 +28,5 @@ class Message(db.Model):
     username = db.Column(db.String)
 
     def to_json(self):
-        return {"player_id": self.player_id, "data": self.data}
+        return {"player_id": self.player_id, "username": self.username, "data": self.data}
 

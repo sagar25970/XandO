@@ -3,8 +3,12 @@
 {% block content %}
 <script
         type="text/javascript"
-        src="{{ url_for('static', filename='index.js') }}"
+        src="{{ url_for('static', filename='api-call.js') }}"
 ></script>
+<script>
+    context.username = "{{ user.username }}"
+    console.log(context.username)
+</script>
 <div class="row" style="height:100%">
     <div class="col-4 messages-form">
         <div class="logo">
@@ -12,7 +16,7 @@
         </div>
 
         <!-- Replace This -->
-        <div class="messages">
+        <div id = "messages" class="messages">
             {% for message in messages %}
             {% if message.username == user.username %}
             <div class="chat-box right">{{ message.data }}</div>
@@ -30,24 +34,46 @@
             </div>
         </form>
     </div>
+    <script>
+        scrollMessages()
+        focusMessage()
+    </script>
 
     <div class="game-container">
         <div class="game-pane">
             <table>
                 <tr>
-                    <td><button id="box0" class="box" value="0" onClick="select(this)"></button></td>
-                    <td><button id="box1" class="box" value="1" onClick="select(this)"></button></td>
-                    <td><button id="box2" class="box" value="2" onClick="select(this)"></button></td>
+                    <td>
+                        <button id="box0" class="box" value="0" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box1" class="box" value="1" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box2" class="box" value="2" onClick="select(this)"></button>
+                    </td>
                 </tr>
                 <tr>
-                    <td><button id="box3" class="box" value="3" onClick="select(this)"></button></td>
-                    <td><button id="box4" class="box" value="4" onClick="select(this)"></button></td>
-                    <td><button id="box5" class="box" value="5" onClick="select(this)"></button></td>
+                    <td>
+                        <button id="box3" class="box" value="3" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box4" class="box" value="4" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box5" class="box" value="5" onClick="select(this)"></button>
+                    </td>
                 </tr>
                 <tr>
-                    <td><button id="box6" class="box" value="6" onClick="select(this)"></button></td>
-                    <td><button id="box7" class="box" value="7" onClick="select(this)"></button></td>
-                    <td><button id="box8" class="box" value="8" onClick="select(this)"></button></td>
+                    <td>
+                        <button id="box6" class="box" value="6" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box7" class="box" value="7" onClick="select(this)"></button>
+                    </td>
+                    <td>
+                        <button id="box8" class="box" value="8" onClick="select(this)"></button>
+                    </td>
                 </tr>
             </table>
             <button onClick="reset()">Reset</button>

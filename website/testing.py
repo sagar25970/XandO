@@ -36,12 +36,17 @@ def test_update():
 def test_api_call():
     game_state = Room.query.get(current_user.room_id).game
     print("Test Update Room State : \"" + game_state + "\"")
+    response_json = get_all_messages()
+    return response_json
+
+
+def get_all_messages():
     all_messages = db.session.query(Room).get(current_user.room_id).messages
     data = []
     for message in all_messages:
         data.append(message.to_json())
-    response = Response(request.method, 'test_update')
-    response.data = data
+    response = Response(request.method, 'get-update')
+    response.messages = data
     response_json = json.dumps(response.__dict__)
     print(response_json)
     return response_json

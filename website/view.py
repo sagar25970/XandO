@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 
 from . import db
 from .model import Message, Room
+from .testing import get_all_messages
 
 view = Blueprint("view", __name__)
 

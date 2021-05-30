@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 
 from . import db
-from .model import Room, Player, Message
+from .model import Room, Player, Message, Game
 
 auth = Blueprint("auth", __name__)
 
@@ -18,11 +18,13 @@ def create_room():
         elif len(room_password) < 1:
             flash('Room password cannot be empty!', category='error')
         else:
-            room = Room(password=room_password, game='         ')
+            room = Room(password=room_password)
             db.session.add(room)
             db.session.flush()
             player = Player(username=username, room_id=room.id)
+            game = Game(room_id=room.id, game_state='         ', current_x=username, current_turn=username)
             db.session.add(player)
+            db.session.add(game)
             db.session.commit()
             display_db()
             login_user(user=player, remember=True)
@@ -80,7 +82,7 @@ def display_db():
     messages = Message.query.all()
     print('Room ID\t\tRoom Password\t\tRoom Game')
     for room in rooms:
-        print(str(room.id) + '\t\t\t' + room.password + '\t\t\t' + room.game)
+        print(str(room.id) + '\t\t\t' + room.password + '\t\t\t')
     print('\n')
 
     print('Player ID\t\tPlayer Username')

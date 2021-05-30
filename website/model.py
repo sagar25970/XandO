@@ -7,10 +7,20 @@ from . import db
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(150))
-    game = db.Column(db.String(9))
-    turn_id = db.Column(db.String(150))
+    game = db.relationship('Game')
     players = db.relationship('Player')
     messages = db.relationship('Message')
+
+
+class Game(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
+    game_state = db.Column(db.String(9))
+    current_x = db.Column(db.String)
+    current_turn = db.Column(db.String)
+
+    def to_json(self):
+        return {"game_state": self.game_state, "current_x": self.current_x, "current_turn": self.current_turn}
 
 
 class Player(db.Model, UserMixin):

@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, request, jsonify
+import json
+
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
 from . import db
-from .model import Message, Room
-from .testing import get_all_messages
+from .auth import display_db
+from .model import Message, Room, Game
+from .response import Response
 
 view = Blueprint("view", __name__)
 
@@ -22,22 +25,50 @@ def home():
     return render_template('home.html', user=current_user, messages=all_messages)
 
 
-@view.route('/update', methods=['POST'])
-def update():
-    all_messages = db.session.query(Room).get(current_user.room_id).messages
-    print("Called by : " + str(current_user.id))
-    return jsonify('', render_template('chat.html', user=current_user, messages=all_messages))
+@view.route("/update", methods=['GET', 'POST'])
+def test_api_call():
+    display_db()
+    response_json = get_update_response()
+    return response_json
 
 
 @view.route("/select-box/<box_slot>", methods=['GET', 'POST'])
 def select_box(box_slot):
     print("Box selected : " + box_slot)
     box_id = int(box_slot)
-    room_game = Room.query.get(current_user.room_id).game
-    room_game = ''.join((room_game[:box_id], 'X', room_game[box_id + 1:]))
-    Room.query.filter(Room.id == current_user.room_id).update({Room.game: room_game})
-    db.session.commit()
-    room_game = Room.query.get(current_user.room_id).game
-    print('Room State : "' + room_game + '"')
-    return {'data': room_game}
+    room_game = Room.query.get(current_user.room_id).game[0]
+    game_state = room_game.game_state
+    print("game state - " + game_state)
+    if current_user.username == room_game.current_x:
+        game_state = ''.join((game_state[:box_id], 'X', game_state[box_id + 1:]))
+    else:
+        game_state = ''.join((game_state[:box_id], 'O', game_state[box_id + 1:]))
 
+    Game.query.filter(Game.room_id == current_user.room_id).update({Game.game_state: game_state})
+    db.session.commit()
+    response = Response(request.method, 'select_box')
+    response.game = get_game()
+    response_json = json.dumps(response.__dict__)
+    print(response_json)
+    return response_json
+
+
+def get_update_response():
+    response = Response(request.method, 'get_update')
+    response.messages = get_all_messages()
+    response.game = get_game()
+    response_json = json.dumps(response.__dict__)
+    print(response_json)
+    return response_json
+
+
+def get_game():
+    return Room.query.get(current_user.room_id).game[0].to_json()
+
+
+def get_all_messages():
+    all_messages = db.session.query(Room).get(current_user.room_id).messages
+    data = []
+    for message in all_messages:
+        data.append(message.to_json())
+    return data

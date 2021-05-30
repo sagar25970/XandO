@@ -27,17 +27,21 @@ async function call(url='', method = 'GET', data = {}){
     return response.json()
 }
 
-function callPost(inputData){
-    call('api-call', 'POST', inputData)
+function callPost(url, inputData=""){
+    call(url, 'POST', inputData)
         .then(data => {
             parseData(data)
         }
     )
 }
 
-function callGet(){
-    call('api-call', 'GET')
+function callGet(url){
+    call(url, 'GET')
         .then(data => console.log(data))
+}
+
+function callUpdate(){
+    callPost('update')
 }
 
 function parseData(data){
@@ -46,12 +50,23 @@ function parseData(data){
     var method_name = data.method_name
     var method_type = data.method_type
 
-    if(method_name == "get-update"){
-        let messages = data["messages"]
+    if(method_name == "get_update"){
+        let messages = data.messages
+        let game = data.game
+        let game_state = game.game_state
         document.getElementById("messages").innerHTML = ""
         messages.forEach(printMessage)
         scrollMessages()
         focusMessage()
+        updateGame(game_state)
+    } else if(method_name == "select_box"){
+        updateGame(data.game.game_state)
+    }
+}
+
+function updateGame(game_state){
+    for(let i = 0; i<9; i++){
+        document.getElementById("box" + i).innerHTML = game_state.charAt(i)
     }
 }
 
@@ -60,8 +75,6 @@ function printMessage(message){
     let data = message["data"]
     let chatMessage = document.createElement("div")
     chatMessage.classList.add("chat-box")
-    console.log(context.username)
-    console.log(username)
     if(context.username == username){
         chatMessage.classList.add("right")
         chatMessage.innerHTML = data
@@ -84,14 +97,22 @@ function focusMessage(){
     document.getElementById("message").focus()
 }
 
-setInterval(callPost, 3000)
+function selectBox(box){
+    callPost("/select-box/" + box.value)
+}
+
+function reset(){
+    callGet('reset')
+}
+
+setInterval(callUpdate, 3000)
 
 /*
 // Example POST method implementation:
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    method: 'POST', // *GET, POST, PgameUT, DELETE, etc.
     mode: 'cors', // no-cors, *cors, same-origin
     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     credentials: 'same-origin', // include, *same-origin, omit

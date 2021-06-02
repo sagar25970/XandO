@@ -37,7 +37,6 @@ function callPost(url, inputData=""){
 
 function callGet(url){
     call(url, 'GET')
-        .then(data => console.log(data))
 }
 
 function callUpdate(){
@@ -53,20 +52,45 @@ function parseData(data){
     if(method_name == "get_update"){
         let messages = data.messages
         let game = data.game
-        let game_state = game.game_state
         document.getElementById("messages").innerHTML = ""
         messages.forEach(printMessage)
         scrollMessages()
         focusMessage()
-        updateGame(game_state)
-    } else if(method_name == "select_box"){
-        updateGame(data.game.game_state)
+        updateGame(game)
+    } else if(method_name == "select_box" && data.status == '200'){
+        updateGame(data.game)
     }
 }
 
-function updateGame(game_state){
+function updateGame(game){
+     var disableBox = false;
+    if(context.username != game.current_turn || !game.current_o){
+        var disableBox = true;
+    }
     for(let i = 0; i<9; i++){
-        document.getElementById("box" + i).innerHTML = game_state.charAt(i)
+        document.getElementById("box" + i).innerHTML = game.game_state.charAt(i)
+        document.getElementById("box" + i).disabled = disableBox
+    }
+
+    var disablePlayer = true
+    if(game.current_x == null && context.username != game.current_o){
+        disablePlayer = false
+    }
+    document.getElementById("player1").disabled = disablePlayer
+    disablePlayer = true
+    if(!game.current_o && context.username != game.current_x){
+        disablePlayer = false
+    }
+    document.getElementById("player2").disabled = disablePlayer
+    if(game.current_x){
+        document.getElementById("x-name").innerHTML = 'X : ' +  game.current_x
+    } else {
+        document.getElementById("x-name").innerHTML = ''
+    }
+    if(game.current_o){
+        document.getElementById("o-name").innerHTML = 'O : ' + game.current_o
+    } else{
+        document.getElementById("o-name").innerHTML = ''
     }
 }
 
@@ -103,6 +127,14 @@ function selectBox(box){
 
 function reset(){
     callGet('reset')
+}
+
+function player1(){
+    callPost('player1')
+}
+
+function player2(){
+    callPost('player2')
 }
 
 setInterval(callUpdate, 3000)

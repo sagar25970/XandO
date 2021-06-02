@@ -6,6 +6,7 @@ from flask_login import current_user
 from . import db
 from .model import Room, Game
 from .response import Response
+from .service.dao_service import display_db
 
 testing = Blueprint('testing', __name__)
 
@@ -35,5 +36,16 @@ def test_update():
     response = Response('POST', 'test_update')
     response.data = data
     response_json = json.dumps(response.__dict__)
-    print(response_json)
     return response_json
+
+
+@testing.route("/test-api", methods=['GET', 'POST'])
+def test_api():
+    game_state = Room.query.get(current_user.room_id).game
+    print("Room State : \"" + game_state + "\"")
+
+
+@testing.route("/db", methods=['GET', 'POST'])
+def db():
+    display_db()
+    return {}

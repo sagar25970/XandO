@@ -39,44 +39,29 @@
     </script>
 
     <div class="game-container">
+        <div class="player-names">
+            <span id="x-name"></span>
+            <span id="o-name"></span>
+        </div>
         <div class="game-pane">
             <table>
-                <tr>
-                    <td>
-                        <button id="box0" class="box" value="0" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box1" class="box" value="1" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box2" class="box" value="2" onClick="selectBox(this)"></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button id="box3" class="box" value="3" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box4" class="box" value="4" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box5" class="box" value="5" onClick="selectBox(this)"></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button id="box6" class="box" value="6" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box7" class="box" value="7" onClick="selectBox(this)"></button>
-                    </td>
-                    <td>
-                        <button id="box8" class="box" value="8" onClick="selectBox(this)"></button>
-                    </td>
-                </tr>
+                {% for i in range(3) %}
+                    <tr>
+                        {% for j in range(3) %}
+                            <td>
+                                <button id="box{{ i*3 + j }}" class="box" value="{{ i*3 + j }}" onClick="selectBox(this)" disabled></button>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
             </table>
+            <button id="player1" onClick="player1()" disabled>Player 1</button>
+            <button id="player2" onClick="player2()" disabled>Player 2</button>
             <button onClick="reset()">Reset</button>
         </div>
     </div>
+    <script>
+        callUpdate()
+    </script>
 </div>
 {% endblock %}

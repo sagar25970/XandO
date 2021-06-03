@@ -83,7 +83,7 @@ def check_if_won(game_state):
 
 
 def check_three_in_a_line(game_state, index_1, index_2, index_3):
-    if game_state[index_1] == game_state[index_2] == game_state[index_3]:
+    if game_state[index_1] == game_state[index_2] == game_state[index_3] != ' ':
         return True
     return False
 

@@ -64,7 +64,7 @@ function parseData(data){
 
 function updateGame(game){
     var disableBox = false;
-    if(context.username != game.current_turn || !game.current_o){
+    if(context.username != game.current_turn || !game.current_o || game.game_won){
         var disableBox = true;
     }
     for(let i = 0; i<9; i++){
@@ -91,6 +91,12 @@ function updateGame(game){
         document.getElementById("o-name").innerHTML = 'O : ' + game.current_o
     } else{
         document.getElementById("o-name").innerHTML = ''
+    }
+
+    if(game.game_won){
+        document.getElementById("winner").innerHTML = 'Winner : ' + game.game_won
+    } else{
+        document.getElementById("winner").innerHTML = ''
     }
 }
 

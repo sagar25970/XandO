@@ -63,7 +63,7 @@ function parseData(data){
 }
 
 function updateGame(game){
-     var disableBox = false;
+    var disableBox = false;
     if(context.username != game.current_turn || !game.current_o){
         var disableBox = true;
     }

@@ -7,7 +7,7 @@ from . import db
 from .model import Message, Room
 from .response import Response
 from .service.game_service import update_game_state, reset_game, update_current_x, update_current_o, get_game, \
-    update_turn
+    check_game_status
 
 view = Blueprint("view", __name__)
 
@@ -43,6 +43,7 @@ def select_box(box_slot):
         else:
             update_game_state(current_user.room_id, 'O', box_id)
         response.status = '200'
+        check_game_status(current_user.room_id, current_user.username)
         response.game = get_game(current_user.room_id).to_json()
     response_json = json.dumps(response.__dict__)
     return response_json

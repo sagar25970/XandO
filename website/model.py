@@ -16,12 +16,14 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
     game_state = db.Column(db.String(9))
+    game_won = db.Column(db.String)
     current_x = db.Column(db.String)
     current_o = db.Column(db.String)
     current_turn = db.Column(db.String)
 
     def to_json(self):
-        return {"game_state": self.game_state, "current_x": self.current_x, "current_o": self.current_o, "current_turn": self.current_turn}
+        return {"game_state": self.game_state, "current_x": self.current_x, "current_o": self.current_o,
+                "current_turn": self.current_turn, "game_won": self.game_won}
 
 
 class Player(db.Model, UserMixin):
@@ -39,4 +41,3 @@ class Message(db.Model):
 
     def to_json(self):
         return {"username": self.username, "data": self.data}
-
